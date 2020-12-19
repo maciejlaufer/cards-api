@@ -2,7 +2,7 @@ module.exports = {
   parserOptions: {
     sourceType: 'module'
   },
-  parser: 'babel-eslint',
+  parser: '@typescript-eslint/parser',
   env: {
     node: true
   },
@@ -10,7 +10,8 @@ module.exports = {
     'standard',
     'prettier',
     'prettier/standard',
-    'plugin:jest/recommended'
+    'plugin:jest/recommended',
+    '@typescript-eslint'
   ],
   plugins: ['prettier', 'jest'],
   rules: {
