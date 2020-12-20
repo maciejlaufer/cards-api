@@ -1,25 +1,23 @@
-import { Router, Request, Response } from 'express';
+import { Request, Response } from 'express';
+import userModel from '../user/user.model';
 
-class AuthController {
-  public path: string = '/auth';
-  public router: Router = Router();
-
-  constructor() {
-    this.intializeRoutes();
-  }
-
-  private intializeRoutes() {
-    this.router.get(`${this.path}/register`, this.register);
-    this.router.get(`${this.path}/login`, this.login);
-  }
-
-  private register(req: Request, res: Response) {
-    return res.send('register');
-  }
-
-  private login(req: Request, res: Response) {
-    return res.send('login');
-  }
+async function register(req: Request, res: Response): Promise<void> {
+  await userModel.create({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: ''
+  });
+  res.send('register');
 }
 
-export default AuthController;
+async function login(req: Request, res: Response): Promise<void> {
+  res.send('login');
+}
+
+const authController = {
+  register,
+  login
+};
+
+export default authController;

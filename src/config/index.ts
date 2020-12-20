@@ -23,14 +23,15 @@ const baseConfig: Config = {
   env: env as Env,
   isDev: env === 'development',
   isTest: env === 'testing',
-  port: Number(process.env.PORT) || 4000,
+  port: Number(process.env.PORT) || 8080,
   jwt: {
     secret: process.env.JWT_SECRET,
     exp: '100d'
-  }
+  },
+  dbUrl: process.env.DB_URL
 };
 
-let envConfig = {};
+let envConfig: Partial<BaseConfig> = {};
 
 switch (env) {
   case 'dev':

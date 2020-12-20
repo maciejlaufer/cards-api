@@ -1,18 +1,22 @@
-import express, { Application } from 'express';
+import express, { Application, Router } from 'express';
+import mongoose from 'mongoose';
 import cors from 'cors';
 import { json, urlencoded } from 'body-parser';
-import Controller from './interfaces/controller.interface';
+import config from './config';
+import authRouter from './resources/auth/auth.router';
+import userRouter from './resources/user/user.router';
 
 class App {
   public app: Application;
   public port: number;
 
-  constructor(controllers: Controller[], port: number) {
+  constructor(port: number) {
     this.app = express();
     this.port = port;
 
+    this.connectToTheDatabase();
     this.initializeMiddlewares();
-    this.initializeControllers(controllers);
+    this.initializeRouter();
   }
 
   private initializeMiddlewares() {
@@ -21,9 +25,18 @@ class App {
     this.app.use(urlencoded({ extended: true }));
   }
 
-  private initializeControllers(controllers: Controller[]) {
-    controllers.forEach(controller => {
-      this.app.use('/api', controller.router);
+  private initializeRouter() {
+    const rootRouter: Router = Router();
+    rootRouter.use('/auth', authRouter);
+    rootRouter.use('/user', userRouter);
+
+    this.app.use('/api', rootRouter);
+  }
+
+  private connectToTheDatabase() {
+    mongoose.connect(config.dbUrl, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
     });
   }
 
